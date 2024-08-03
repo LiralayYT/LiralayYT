@@ -6,8 +6,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
 
 
 <?php
+//session_start();
 include "connect.php";
+include "class_csrf.php";
 
+//$csrf = new Token();
+
+
+// Генерация id и значения токена
+//$token_id = $csrf->get_token_id();
+//$token_value = $csrf->get_token($token_id);
  ?>
 <html>
     
@@ -129,7 +137,23 @@ $fio=$_POST['fio'];
 $email=$_POST['email'];
 $phone=$_POST['phone'];
 $city=$_POST['list1'];
-$zero =0;
+
+
+$ip = $_SERVER['REMOTE_ADDR'];
+
+$sql = ("SELECT * FROM `people` WHERE `ip` = '$ip'");
+$connect= mysqli_query($induction,$sql);
+if(mysqli_num_rows($sql) > 5)
+{
+    ?>
+  <script>applicantForm.querySelector('button').disabled = true;</script> 
+  
+  <?php
+ echo "Вы оставляли заявку более 5 раз";
+ 
+}
+
+
 
   
 $sql= "INSERT INTO `people`(`FIO`,`email`,`Phone`,`City`) VALUES('$fio','$email','$phone','$city')";
